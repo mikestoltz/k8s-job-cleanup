@@ -36,3 +36,22 @@ spec:
                 value: "app=my-worker"
           restartPolicy: OnFailure
 ```
+
+### RBAC
+If your cluster has rbac enabled, the default service account for the namespace the job will run in needs permission to list & delete jobs.
+
+```
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: k8s-job-cleanup-admin
+  namespace: workers
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: workers
+```
