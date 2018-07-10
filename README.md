@@ -14,15 +14,23 @@ CronJob to clean up kubernetes jobs by selector after they reach a certain age.
 
 
 ### Example Useage
+
+This example also cleans up the job that the k8s-job-cleanup cronjob creates to clean up the jobs.
+
 ``` yaml
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: k8s-job-cleanup
   namespace: workers
+  labels:
+    app: k8s-job-cleanup
 spec:
   schedule: "0 0 * * *"
   jobTemplate:
+    metadata:
+      labels:
+        app: k8s-job-cleanup
     spec:
       template:
         spec:
@@ -33,7 +41,7 @@ spec:
               - name: NAMESPACE
                 value: "workers"
               - name: SELECTORS
-                value: "app=my-worker"
+                value: "'app in (my-worker, k8s-job-cleanup)'"
           restartPolicy: OnFailure
 ```
 
