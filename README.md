@@ -41,7 +41,7 @@ spec:
               - name: NAMESPACE
                 value: "workers"
               - name: SELECTORS
-                value: "'app in (my-worker, k8s-job-cleanup)'"
+                value: "app in (my-worker, k8s-job-cleanup)"
           restartPolicy: OnFailure
 ```
 
